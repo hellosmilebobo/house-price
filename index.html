@@ -1,46 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>House Price Calculator</title>
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>House ROI Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
 </head>
-<body>
-  <div class="container">
-    <h1>Loan calculator</h1>
-    
-  <form id="loan-form">
-  <label for="house-price">House Price:</label>
-  <input type="number" id="house-price" placeholder="Enter house price" required>
+<body class="container mt-4">
+    <h2 class="text-center">House ROI Calculator</h2>
+    <div class="row">
+        <div class="col-md-6">
+            <label>Buy Flat Price (£):</label>
+            <input type="number" id="flatPrice" class="form-control" value="300000">
+            
+            <label>Deposit Amount (£):</label>
+            <input type="number" id="deposit" class="form-control" value="60000">
+            
+            <label>Loan Interest Rate (% per year):</label>
+            <input type="number" id="loanRate" class="form-control" value="3.5">
+            
+            <label>Loan Term (Years):</label>
+            <input type="number" id="loanTerm" class="form-control" value="25">
+            
+            <label>Service Charge per Year (£):</label>
+            <input type="number" id="serviceCharge" class="form-control" value="1500">
+            
+            <label>Ground Rental per Year (£):</label>
+            <input type="number" id="groundRental" class="form-control" value="500">
+            
+            <label>Inflation Rate (% per year, default 2%):</label>
+            <input type="number" id="inflationRate" class="form-control" value="2">
+            
+            <label>Deposit Interest Rate (% per year):</label>
+            <input type="number" id="depositRate" class="form-control" value="2">
+            
+            <button class="btn btn-primary mt-3" onclick="calculateROI()">Calculate</button>
+        </div>
+    </div>
 
-  <label for="down-payment">Down Payment:</label>
-  <input type="number" id="down-payment" placeholder="Enter down payment" required>
+    <h3 class="mt-4">Results</h3>
+    <p>Monthly Loan Payment: <strong id="monthlyPayment"></strong></p>
+    <table class="table table-bordered mt-3">
+        <thead>
+            <tr>
+                <th>Year</th>
+                <th>Loan Pay Per Year (£)</th>
+                <th>Service Charge + Ground Rental (£)</th>
+                <th>Total Expense for Buying a Flat (£)</th>
+                <th>Yearly Rent (£)</th>
+                <th>Buy Flat Save Money (£)</th>
+                <th>Saving Interest (£)</th>
+                <th>Deposit Lost Interest (£)</th>
+                <th>Flat Price Raise Profit (£)</th>
+                <th>Principal Paid (£)</th>
+                <th>Balance (£)</th>
+            </tr>
+        </thead>
+        <tbody id="resultTable"></tbody>
+    </table>
 
-  <label for="interest-rate">Interest Rate (%):</label>
-  <input type="number" id="interest-rate" step="0.0001" placeholder="Enter interest rate (up to 4 decimal places)" required>
-
-  <label for="loan-term">Loan Term (Years):</label>
-  <input type="number" id="loan-term" placeholder="Enter loan term" required>
-
-  <button type="submit">Calculate</button>
-
-  <!-- Displaying results directly in the form -->
-  <div id="results">
-    <label>Loan Amount:</label>
-    <input type="text" id="loan-amount" readonly placeholder="Loan Amount" />
-
-    <label>Monthly Payment:</label>
-    <input type="text" id="monthly-payment" readonly placeholder="Monthly Payment" />
-
-    <label>Total Repayment:</label>
-    <input type="text" id="total-repayment" readonly placeholder="Total Repayment" />
-
-    <label>Total Interest:</label>
-    <input type="text" id="total-interest" readonly placeholder="Total Interest" />
-  </div>
-</form>
-
-  <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
+
