@@ -1,32 +1,54 @@
-// Listen to the input changes on house price, down payment, interest rate, and loan term
-document.getElementById("loan-form").addEventListener("input", calculateLoanResults);
+function calculateROI() {
+  let flatPrice = parseFloat(document.getElementById('flatPrice').value);
+  let deposit = parseFloat(document.getElementById('deposit').value);
+  let loanRate = parseFloat(document.getElementById('loanRate').value) / 100;
+  let loanTerm = parseInt(document.getElementById('loanTerm').value);
+  let serviceCharge = parseFloat(document.getElementById('serviceCharge').value);
+  let groundRental = parseFloat(document.getElementById('groundRental').value);
+  let inflationRate = parseFloat(document.getElementById('inflationRate').value) / 100;
+  let depositRate = parseFloat(document.getElementById('depositRate').value) / 100;
 
-// Function to calculate the loan results
-function calculateLoanResults() {
-  const housePrice = parseFloat(document.getElementById("house-price").value);
-  const downPayment = parseFloat(document.getElementById("down-payment").value);
-  const loanAmount = housePrice - downPayment;
+  let loanAmount = flatPrice - deposit;
+  let monthlyRate = loanRate / 12;
+  let numPayments = loanTerm * 12;
+  
+  let monthlyPayment = (loanAmount * monthlyRate) / (1 - Math.pow(1 + monthlyRate, -numPayments));
+  document.getElementById('monthlyPayment').innerText = `£${monthlyPayment.toFixed(2)}`;
 
-  const interestRate = parseFloat(document.getElementById("interest-rate").value) / 100 / 12; // Monthly interest rate
-  const loanTerm = parseInt(document.getElementById("loan-term").value) * 12; // Total months
+  let yearlyLoanPayment = monthlyPayment * 12;
+  let totalServiceCharge = serviceCharge + groundRental;
+  let yearlyRent = (flatPrice * 0.065) / 12 * 12;
+  
+  let resultTable = document.getElementById('resultTable');
+  resultTable.innerHTML = '';
 
-  if (isNaN(loanAmount) || loanAmount <= 0 || isNaN(interestRate) || isNaN(loanTerm)) return;
-
-  // Display loan amount
-  document.getElementById("loan-amount").value = `￥${loanAmount.toFixed(2)}`;
-
-  // Calculate monthly payment
-  const x = Math.pow(1 + interestRate, loanTerm);
-  const monthlyPayment = (loanAmount * interestRate * x) / (x - 1);
-
-  // Calculate total repayment and total interest
-  const totalRepayment = monthlyPayment * loanTerm;
-  const totalInterest = totalRepayment - loanAmount;
-
-  // Display the results
-  if (isFinite(monthlyPayment) && monthlyPayment > 0) {
-    document.getElementById("monthly-payment").value = `￥${monthlyPayment.toFixed(2)}`;
-    document.getElementById("total-repayment").value = `￥${totalRepayment.toFixed(2)}`;
-    document.getElementById("total-interest").value = `￥${totalInterest.toFixed(2)}`;
+  for (let year = 1; year <= loanTerm; year++) {
+      let totalExpense = yearlyLoanPayment + totalServiceCharge;
+      let buyFlatSaveMoney = yearlyRent - totalExpense;
+      let savingInterest = buyFlatSaveMoney * depositRate;
+      let depositLostInterest = deposit * depositRate;
+      let flatPriceRaiseProfit = flatPrice * inflationRate;
+      let principalPaid = yearlyLoanPayment - (loanAmount * loanRate);
+      let balance = buyFlatSaveMoney + savingInterest - depositLostInterest + flatPriceRaiseProfit + principalPaid;
+      
+      let row = document.createElement('tr');
+      row.innerHTML = `
+          <td>${year}</td>
+          <td>£${yearlyLoanPayment.toFixed(2)}</td>
+          <td>£${totalServiceCharge.toFixed(2)}</td>
+          <td>£${totalExpense.toFixed(2)}</td>
+          <td>£${yearlyRent.toFixed(2)}</td>
+          <td>£${buyFlatSaveMoney.toFixed(2)}</td>
+          <td>£${savingInterest.toFixed(2)}</td>
+          <td>£${depositLostInterest.toFixed(2)}</td>
+          <td>£${flatPriceRaiseProfit.toFixed(2)}</td>
+          <td>£${principalPaid.toFixed(2)}</td>
+          <td>£${balance.toFixed(2)}</td>
+      `;
+      resultTable.appendChild(row);
+      
+      totalServiceCharge *= (1 + inflationRate);
+      yearlyRent *= (1 + inflationRate);
   }
 }
+
