@@ -26,8 +26,9 @@ function calculateROI() {
       let totalExpense = yearlyLoanPayment + totalServiceCharge;
       let buyFlatSaveMoney = yearlyRent - totalExpense;
       let savingInterest = buyFlatSaveMoney * depositRate;
-      let depositLostInterest = deposit * (1+depositRate)^(year-1)*depositRate;
-      let flatPriceRaiseProfit = flatPrice * (1+inflationRate)^(year-1)*inflationRate;
+      let depositLostInterest = deposit * Math.pow(1 + depositRate, year - 1) * depositRate;
+      let flatPriceRaiseProfit = flatPrice * Math.pow(1 + inflationRate, year - 1) * inflationRate;
+
       let principalPaid = yearlyLoanPayment - (loanAmount * loanRate);
       let balance = buyFlatSaveMoney + savingInterest - depositLostInterest + flatPriceRaiseProfit + principalPaid;
       
